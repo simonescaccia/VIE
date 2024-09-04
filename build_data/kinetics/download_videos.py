@@ -1,3 +1,4 @@
+from multiprocessing.pool import ThreadPool
 import numpy as np
 import os
 import sys
@@ -37,7 +38,7 @@ def get_parser():
             '--len_idx', default=2500, type=int, 
             action='store', help='Length of index of downloading')
     parser.add_argument(
-            '--check', default=0, type=int, action='store', 
+            '--check', default=1, type=int, action='store', 
             help='Whether checking the existence')
     return parser
 
@@ -96,8 +97,9 @@ def make_dirs(args, cate_lbls):
 def download_one_video(curr_indx, args, csv_data):
     # Borrowed from https://github.com/nficano/pytube
     import cv2
-    from pytube import YouTube
-    youtube_frmt = "http://youtu.be/%s"
+    from pytubefix import YouTube
+    from pytubefix import exceptions
+    youtube_frmt = "http://youtube.com/watch?v=%s"
     curr_data = csv_data[curr_indx]
     curr_folder = curr_data['cate']
     curr_youtube_web = youtube_frmt % curr_data['id']
@@ -113,10 +115,13 @@ def download_one_video(curr_indx, args, csv_data):
         if args.check==0:
             os.system('rm %s' % avi_path)
         else:
-            return 
+            return
 
-    video = yt.streams.filter(
-            progressive=True, subtype='mp4', resolution='360p').first()
+    try:
+        video = yt.streams.filter(
+                progressive=True, subtype='mp4', resolution='360p').first()
+    except exceptions.VideoUnavailable:
+        return
 
     mp4_folder = os.path.join(args.save_raw_dir, curr_folder)
     mp4_path = os.path.join(
@@ -165,7 +170,7 @@ def download_one_video(curr_indx, args, csv_data):
 
 def multi_process_download(args, csv_data, curr_len):
     _func = functools.partial(download_one_video, args=args, csv_data=csv_data)
-    p = Pool(30)
+    p = Pool(1)
     r = list(tqdm(
         p.imap(
             _func, 
