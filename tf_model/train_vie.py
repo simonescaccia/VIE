@@ -19,6 +19,8 @@ import config
 import pdb
 import data
 
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
 TRN_TYPES = ['trn', 'tsrn']
 SLOW_TYPES = ['slow', 'tsrn_slow', 'slowsingle_avg']
 SLOWFAST_A4_TYPES = [
@@ -659,7 +661,7 @@ def main():
     # Parse arguments
     cfg = get_config()
     args = cfg.parse_args()
-    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
+    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
     # Get params needed, start training
     params = get_params_from_arg(args)

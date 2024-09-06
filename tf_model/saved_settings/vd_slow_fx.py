@@ -3,8 +3,8 @@ from saved_settings.vd_single_frame_fx import vd_basic, res18_la
 
 
 def slow_bs(args):
-    args['batch_size'] = 64
-    args['test_batch_size'] = 32
+    args['batch_size'] = 2
+    args['test_batch_size'] = 2
     args['test_no_frames'] = 5
     args['kNN_val'] = 10
     args['fre_filter'] = 50000

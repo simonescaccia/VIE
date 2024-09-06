@@ -62,9 +62,7 @@ def get_cfg_transform(args):
 
 def get_train_dataloader(args, dataset):
     dataloader = torch.utils.data.DataLoader(
-            dataset, batch_size=args.batch_size, shuffle=True, 
-            num_workers=args.train_num_workers, pin_memory=False, 
-            worker_init_fn=lambda x: np.random.seed(x))
+            dataset, batch_size=args.batch_size, shuffle=True, pin_memory=False)
     return dataloader
 
 

@@ -15,15 +15,15 @@ def vd_3dresnet_IR():
     args['exp_id'] = 'vd_3dresnet_IR'
     args['model_type'] = '3dresnet'
     args['task'] = 'IR'
-    args['train_num_workers'] = 40
-    args['val_num_workers'] = 20
-    args['train_num_steps'] = 50000
+    args['train_num_workers'] = 1
+    args['val_num_workers'] = 1
+    args['train_num_steps'] = 10
     return args
 
 
 def load_from_3dresnet_IR(args):
     args['load_exp'] = 'vd_unsup_fx/dyn_clstr/vd_3dresnet_IR'
-    args['load_step'] = 50000
+    args['load_step'] = 11
     return args
 
 
@@ -40,7 +40,7 @@ def vd_3dresnet():
     args['exp_id'] = 'vd_3dresnet'
     args['model_type'] = '3dresnet'
     args['lr_boundaries'] = '974946,1304998'
-    args['train_num_steps'] = 1600000
-    args['train_num_workers'] = 40
-    args['val_num_workers'] = 20
+    args['train_num_steps'] = 9
+    args['train_num_workers'] = 1
+    args['val_num_workers'] = 1
     return args

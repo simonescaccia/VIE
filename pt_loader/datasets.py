@@ -67,7 +67,7 @@ class VideoDataset(data.Dataset):
         try:
             return Image.open(tmpl.format(idx)).convert('RGB')
         except Exception:
-            print('error loading image: {}'.format(tmpl.format(idx)))
+            # print('error loading image: {}'.format(tmpl.format(idx)))
             return Image.open(tmpl.format(1)).convert('RGB')
 
     def __get_interval_valid_range(self, rec_no_frames):
@@ -141,8 +141,9 @@ class VideoDataset(data.Dataset):
         with open(self.metafile) as f:
             lines = [x.strip().split(' ') for x in f]
             lines = [line for line in lines
-                     if int(line[1]) >= self.MIN_NUM_FRAMES]
-
+                     if int(line[1]) >= self.MIN_NUM_FRAMES
+                     and os.path.exists(
+                         os.path.join(self.root, line[0]))]
         self.video_list = [VideoRecord(*v) for v in lines]
         if self.part_vd is not None:
             np.random.seed(0)
@@ -235,11 +236,11 @@ class VideoDataset(data.Dataset):
         # check this is a legit video folder
         while not os.path.exists(
                 os.path.join(self.root, record.path, self.file_tmpl.format(1))):
-            print(
-                os.path.join(
-                    self.root,
-                    record.path,
-                    self.file_tmpl.format(1)))
+            # print(
+            #     os.path.join(
+            #         self.root,
+            #         record.path,
+            #         self.file_tmpl.format(1)))
             index = np.random.randint(len(self.video_list))
             record = self.video_list[index]
 
