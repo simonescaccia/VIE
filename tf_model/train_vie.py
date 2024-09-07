@@ -99,7 +99,7 @@ def get_config():
             help='Using reduce_mean in TRNModel')
     cfg.add('clstr_update_fre', type=int, default=None,
             help='Update frequency for cluster')
-    cfg.add('kmeans_k', type=str, default='10000',
+    cfg.add('kmeans_k', type=str, default='100',
             help='K for Kmeans')
     cfg.add('bin_interval', type=int, default=None,
             help='Bin interval for binned video dataset')
@@ -575,9 +575,9 @@ def get_params_from_arg(args):
                 clustering.apply_clusters(sess, new_clust_labels)
 
         if args.part_vd is None:
-            data_en_update_fre = args.data_len // args.batch_size
+            data_en_update_fre = train_data_loader.dataset.__len__() // args.batch_size
         else:
-            new_length = int(args.data_len * args.part_vd)
+            new_length = int(train_data_loader.dataset.__len__() * args.part_vd)
             data_en_update_fre = new_length // args.batch_size
 
         # TODO: make this smart
@@ -660,7 +660,7 @@ def main():
     # Parse arguments
     cfg = get_config()
     args = cfg.parse_args()
-    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     # Get params needed, start training
     params = get_params_from_arg(args)

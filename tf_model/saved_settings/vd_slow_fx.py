@@ -7,9 +7,9 @@ def slow_bs(args):
     args['test_batch_size'] = 2
     args['test_no_frames'] = 5
     args['kNN_val'] = 10
-    args['fre_filter'] = 50000
-    args['fre_cache_filter'] = 5000
-    args['fre_valid'] = 5000
+    args['fre_filter'] = 50
+    args['fre_cache_filter'] = 50
+    args['fre_valid'] = 50
     return args
 
 
