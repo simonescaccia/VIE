@@ -106,8 +106,7 @@ def get_val_cfg_transform(args):
 
 def get_val_dataloader(args, dataset):
     dataloader = torch.utils.data.DataLoader(
-            dataset, batch_size=args.test_batch_size, shuffle=False, 
-            num_workers=args.val_num_workers, pin_memory=False)
+            dataset, batch_size=args.test_batch_size, shuffle=False, pin_memory=False)
     return dataloader
 
 

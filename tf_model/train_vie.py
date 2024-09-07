@@ -490,8 +490,6 @@ def get_topn_val_data_param_from_arg(args):
 
 
 def get_valid_loop_from_arg(args):
-    val_len = args.val_len
-    val_step_num = int(val_len/args.test_batch_size)
     if args.model_type == 'single_frame':
         val_data_loader = data.get_val_pt_loader(args)
     elif args.model_type in SLOW_TYPES:
@@ -505,6 +503,7 @@ def get_valid_loop_from_arg(args):
     else:
         val_data_loader = data.get_val_fast_pt_loader(args)
     val_counter = [0]
+    val_step_num = int(val_data_loader.dataset.__len__()/args.test_batch_size)
     val_data_enumerator = [enumerate(val_data_loader)]
     def valid_loop(sess, target):
         val_counter[0] += 1
