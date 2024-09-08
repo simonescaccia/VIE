@@ -34,7 +34,6 @@ class TrainFramework(object):
 
     def build_inputs(self):
         data_params = self.train_params['data_params']
-        print(data_params)
         func = data_params.pop('func')
         self.inputs = func(**data_params)
 

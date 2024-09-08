@@ -23,7 +23,7 @@ def vd_3dresnet_IR():
 
 def load_from_3dresnet_IR(args):
     args['load_exp'] = 'vd_unsup_fx/dyn_clstr/vd_3dresnet_IR'
-    args['load_step'] = 100
+    args['load_step'] = 0
     return args
 
 

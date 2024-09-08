@@ -564,7 +564,7 @@ def get_params_from_arg(args):
         global_step = sess.run(global_step_vars[0])
 
         first_flag = len(first_step) == 0
-        update_fre = args.clstr_update_fre or NUM_BATCHES_PER_EPOCH
+        update_fre = args.clstr_update_fre or train_data_loader.dataset.__len__() // args.batch_size
         if (global_step % update_fre == 0 or first_flag) \
                 and (nn_clusterings[0] is not None):
             if first_flag:
