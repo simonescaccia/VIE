@@ -526,6 +526,8 @@ def get_params_from_arg(args):
     NUM_BATCHES_PER_EPOCH = data_len // args.batch_size
 
     save_params, load_params = get_save_load_params_from_arg(args)
+    train_data_loader = get_train_pt_loader_from_arg(args)
+    dataset_lenght = train_data_loader.dataset.__len__()
 
     # XXX: hack to set up training loop properly
     if args.kmeans_k.isdigit():
@@ -536,6 +538,7 @@ def get_params_from_arg(args):
     first_step = []
     # model_params: a function that will build the model
     model_func_params = get_model_func_params(args)
+    model_func_params["instance_data_len"] = dataset_lenght
     def build_output(inputs, train, **kwargs):
         res = instance_model.build_output(inputs, train, **model_func_params)
         if not train:
@@ -551,8 +554,6 @@ def get_params_from_arg(args):
                                    % (idx + args.gpu_offset) \
                                    for idx in range(multi_gpu)]
 
-    train_data_loader = get_train_pt_loader_from_arg(args)
-
     data_enumerator = [enumerate(train_data_loader)]
     def train_loop(sess, train_targets, num_minibatches=1, **params):
         assert num_minibatches==1, "Mini-batch not supported!"
@@ -564,7 +565,7 @@ def get_params_from_arg(args):
         global_step = sess.run(global_step_vars[0])
 
         first_flag = len(first_step) == 0
-        update_fre = args.clstr_update_fre or train_data_loader.dataset.__len__() // args.batch_size
+        update_fre = args.clstr_update_fre or dataset_lenght // args.batch_size
         if (global_step % update_fre == 0 or first_flag) \
                 and (nn_clusterings[0] is not None):
             if first_flag:
@@ -575,9 +576,9 @@ def get_params_from_arg(args):
                 clustering.apply_clusters(sess, new_clust_labels)
 
         if args.part_vd is None:
-            data_en_update_fre = train_data_loader.dataset.__len__() // args.batch_size
+            data_en_update_fre = dataset_lenght // args.batch_size
         else:
-            new_length = int(train_data_loader.dataset.__len__() * args.part_vd)
+            new_length = int(dataset_lenght * args.part_vd)
             data_en_update_fre = new_length // args.batch_size
 
         # TODO: make this smart
@@ -660,6 +661,8 @@ def main():
     # Parse arguments
     cfg = get_config()
     args = cfg.parse_args()
+    args.instance_k = 24 # number of neighbor embeddings to evaluate
+    args.kmeans_k = '10' # number of different clusters
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     # Get params needed, start training

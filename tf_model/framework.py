@@ -4,7 +4,7 @@ import time
 import tqdm
 import pdb
 import copy
-
+import sys
 
 class TrainFramework(object):
     def __init__(self, params):
@@ -256,7 +256,7 @@ class TrainFramework(object):
     def train(self):
         self.build_train()
         self.build_val()
-
+        
         self.build_sess_and_saver()
         self.init_and_restore()
 
