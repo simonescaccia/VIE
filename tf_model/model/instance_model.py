@@ -123,10 +123,7 @@ def resnet_embedding(image,
                      num_classes=MEMORY_DIM,
                      final_pooling=None,
                      slowfast_single_pooling=False):
-    print("type(image)", image.dtype)
     image = color_normalize(image)
-    print("type(image)", image.dtype)
-
     model_kwargs = {}
     model_class = resnet_model.SingleFrameModel
     if model_type == 'slow': 
@@ -359,10 +356,8 @@ def build_output(
                 initializer=lbl_init_values,
                 trainable=False, dtype=tf.int64,
             )
-    print("inputs['image'].shape", inputs['image'].shape)
     output = resnet_embedding(
             inputs['image'], **embedding_kwargs)
-    print("output.shape", output.shape)
     output = tf.nn.l2_normalize(output, axis=1)
 
     if not train:

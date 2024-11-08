@@ -15,3 +15,10 @@ The outputs will be stored in a dictionary, with keys like `encode_x` (x is from
 Layer `encode_1` is the output of the first pooling layer.
 The other layers are outputs from the following residual blocks (ResNet18 has 9 residual blocks in total).
 The output is in shape `(batch_size, channels, temporal_dim, spatial_dim, spatial_dim)`.
+
+## Environment setup
+
+virtualenv --system-site-packages -p python3.7 ./venv
+source venv/bin/activate
+
+pip3 install -r requirements.txt
